@@ -45,7 +45,7 @@ let majorQuakes = new L.LayerGroup();
 let overlays = {
   "Earthquakes": allEarthquakes,
   "Plates": tectonicPlates,
-  "Major Quakes": majorQuakes
+  "Major Earthquakes": majorQuakes
 };
 
 // Then we add a control to the map that will allow the user to change which
