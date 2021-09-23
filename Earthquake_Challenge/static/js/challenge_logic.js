@@ -37,9 +37,12 @@ let baseMaps = {
 };
 
 // 1. Add a 2nd layer group for the tectonic plate data.
-let allEarthquakes = new L.LayerGroup();
-let tectonicPlates = new L.LayerGroup();
+let allEarthquakes = new L.LayerGroup().addTo(map);
+// L.stamp(allEarthquakes) ;
+let tectonicPlates = new L.LayerGroup().addTo(map);
+// L.stamp(tectonicPlates) ;
 let majorQuakes = new L.LayerGroup();
+// L.stamp(majorQuakes) ;
 
 // 2. Add a reference to the tectonic plates group to the overlays object.
 let overlays = {
@@ -50,7 +53,7 @@ let overlays = {
 
 // Then we add a control to the map that will allow the user to change which
 // layers are visible.
-L.control.layers(baseMaps, overlays).addTo(map);
+L.control.layers(baseMaps, overlays,{collapsed:true}).addTo(map);
 
 // Retrieve the earthquake GeoJSON data.
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
@@ -69,8 +72,8 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
       weight: 0.5
     };
   }
-
-  // This function determines the color of the marker based on the magnitude of the earthquake.
+  //All Earthquakes
+  // This function determines the color of the marker based on the magnitude of the earthquake .
   function getColor(magnitude) {
     if (magnitude > 5) {
       return "#ea2c2c";
@@ -103,7 +106,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   L.geoJson(data, {
     	// We turn each feature into a circleMarker on the map.
     	pointToLayer: function(feature, latlng) {
-      		console.log(data);
+      		// console.log(data);
       		return L.circleMarker(latlng);
         },
       // We set the style for each circleMarker using our styleInfo function.
@@ -120,7 +123,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
 
 
 
-///MAJOR earthquake
+///MAJOR earthquakes
 
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson").then(function(data) {
 
@@ -140,6 +143,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geoj
   }
 
   // This function determines the color of the marker based on the magnitude of the earthquake.
+  // Slightly different from all earthquakes to capture the 6+ category to make 3 categories
   function getColor(magnitude) {
     if (magnitude > 6) {
       return "#9932CC";
@@ -166,7 +170,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geoj
   L.geoJson(data, {
     	// We turn each feature into a circleMarker on the map.
     	pointToLayer: function(feature, latlng) {
-      		console.log(data);
+      		// console.log(data);
       		return L.circleMarker(latlng);
         },
       // We set the style for each circleMarker using our styleInfo function.
@@ -199,6 +203,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geoj
       "#9932CC"
     ];
 
+    // Add title to legend to distinguish colors for major earthquakes
     div.innerHTML += '<b>Major Earthquake Key</b><br>'  
   
   // Looping through our intervals to generate a label with a colored square for each interval.
@@ -235,6 +240,7 @@ legend.onAdd = function() {
     "#ea2c2c"
   ];
 
+  // Add title to legend to distinguish colors for ALL earthquakes
   div.innerHTML += '<b>All Earthquake Key</b><br>'
 
 // Looping through our intervals to generate a label with a colored square for each interval.
@@ -276,8 +282,4 @@ legend.onAdd = function() {
     
   });
 
-
 });
-
-// Then we add our 'graymap' tile layer to the map.
-light.addTo(map)
